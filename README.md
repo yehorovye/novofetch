@@ -36,3 +36,10 @@ This will produce a binary called novofetch in the current directory.
 
 ### Showcase
 ![](https://furry.is-from.space/r/ss_20250615_154405.png)
+
+### Is it fast?
+It is pretty fast.
+
+![](https://furry.is-from.space/r/ss_20250615_165143.png)
+
+> So yes, it is fast but I personally recommend using `microfetch` as it is way faster than any other fetch.

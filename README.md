@@ -19,10 +19,10 @@ A minimalist system fetch tool written in [V](https://vlang.io).
 - [V language](https://vlang.io) installed and available in your `$PATH` (for nix users, there is a flake for easy development)
 - Unix-like OS (Linux, macOS) (i was too lazy to make windows support)
 
-### Clone and Build
+### Clone and Build (or contribute)
 
 ```sh
-git clone https://github.com/yourusername/novofetch
+git clone https://github.com/yehorovye/novofetch
 cd novofetch
 v -prod .
 ```

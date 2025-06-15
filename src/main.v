@@ -179,6 +179,11 @@ fn read_uptime() int {
 		}
 		boot := parts[1].split(',')[0].int()
 		return time.now().unix_time() - boot
+	} $else $if windows {
+		// TODO: Test this code
+		res := os.execute('Uptime')
+
+		return res
 	} $else {
 		return -1
 	}
@@ -190,6 +195,9 @@ fn get_model() string {
 	} $else $if macos {
 		res := os.execute('sysctl -n hw.model')
 		return if res.exit_code == 0 { res.output.trim_space() } else { '' }
+	} $else $if windows {
+		// TODO: Windows support
+		return ''
 	} $else {
 		return ''
 	}
@@ -333,6 +341,10 @@ fn get_art(fake string) string {
 }
 
 fn main() {
+	$if windows {
+		panic('windows is not yet supported')
+	}
+
 	fake := if os.args.len > 1 { os.args[1] } else { '' }
 
 	art := get_art(fake)
@@ -357,8 +369,7 @@ fn main() {
 	total, free := root_disk_usage()
 
 	mut info_lines := [
-		'${col_blue}${os.getenv('USER')}${col_white}@${col_blue}${host}${col_reset}',
-		'-------------------------------------',
+		'${col_yellow} ${os.getenv('USER')}${col_red}@${col_green}${host} ${col_red}~${col_reset}',
 		'${col_yellow}OS${col_white}: ${uname.sysname} ${uname.release}${col_reset}',
 		'${col_yellow}Model${col_white}: ${get_model()}${col_reset}',
 		'${col_yellow}Kernel${col_white}: ${uname.version}${col_reset}',

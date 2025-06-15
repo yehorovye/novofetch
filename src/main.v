@@ -24,24 +24,50 @@ struct Art {
 // if want more logos please submit a pr
 const arts = [
 	Art{
-		name: 'NixOS'
+		name: 'Nix'
 		art:  [
-			'${col_pri}       ██   ${col_sec}███  ██${col_reset}',
-			'${col_pri}       ███   ${col_sec}██████${col_reset}',
-			'${col_pri}        ███   ${col_sec}██████${col_reset}',
-			'${col_pri}    ████████████${col_sec}${col_reset}${col_sec}████${col_pri}   ${col_reset}',
-			'${col_pri}   ██████████████${col_sec}${col_reset}${col_sec}███${col_pri}  ██${col_reset}',
-			'${col_sec}        ███      ███${col_pri}███${col_reset}',
-			'${col_sec}       ███        ██${col_pri}███${col_reset}',
-			'${col_sec}█████████          ${col_pri}████████${col_reset}',
-			'${col_sec}████████${col_pri}${col_reset}${col_pri}          █████████${col_reset}',
-			'${col_sec}    ███${col_pri}${col_reset}${col_pri}██        ███${col_reset}',
-			'${col_sec}   ███${col_pri}███      ███${col_reset}',
-			'${col_sec}   ██  ${col_pri}███${col_sec}██████████████${col_reset}',
-			'${col_sec}       ${col_pri}████${col_sec}████████████${col_reset}',
-			'${col_pri}        ██████   ${col_sec}███${col_reset}',
-			'${col_pri}       ██████   ${col_sec}███${col_reset}',
-			'${col_pri}       ██  ███   ${col_sec}██${col_reset}',
+			"${col_pri}        .;c:.    .cxkkx;   'dxl.${col_reset}",
+			'${col_pri}        .;cc;.    .lxxkd,..lkko.${col_reset}',
+			"${col_pri}         .;cc;.    .,cxkdldkko'${col_reset}",
+			"${col_pri}     .....,ccc:'.....,lxkkkkl.${col_reset}",
+			"${col_sec}    .:cccccccccccccccc:lxkkd'    .,.${col_reset}",
+			"${col_sec}    ......;ccc:'........;dkxl.  .:c:.${col_reset}",
+			"${col_sec}         .lxxo'          'okkl'':cc,.${col_reset}",
+			"${col_sec}       .,okko'            .oxl::cc,.${col_reset}",
+			'${col_sec}:oooooodxkxl.              .;:cccc:;;;;,${col_reset}',
+			"${col_sec}coooodkkkxo,.              .,cc::;;;;;;'${col_reset}",
+			"${col_sec} ...'lkkxl::;.            .;cc;.${col_reset}",
+			'${col_sec}   .cxkd;.;cc;.          .;cc;.${col_reset}',
+			"${col_sec}   'dkd,  .,cc:'.,;;,,;,;clll:;;;,;'${col_reset}",
+			"${col_pri}    ,c'    .:cc::lxkkkkkkkkkkkkkkkd'${col_reset}",
+			'${col_pri}          .,ccccc:;,,,,,:dkkxl;,,,.${col_reset}',
+			"${col_pri}         .;cc:;:cc,.     'okko'${col_reset}",
+			"${col_pri}        .;cc;. .:cc;'.    .okko.${col_reset}",
+			"${col_pri}        .;c;.   ':ccc,     'dxl.${col_reset}",
+		]
+	},
+	Art{
+		name: 'Gentoo'
+		art:  [
+			'${col_pri}         :!?5PGBBBG5Y7~:                ${col_reset}',
+			'${col_pri}      ^?P#@@@@@@@@@&&#BPY7^.            ${col_reset}',
+			'${col_pri}    ~5#@@@@@@@@@@@@&&&###BG5J~.         ${col_reset}',
+			'${col_pri}  ^Y&@@@@@@@@@@@@@@&#####BBGGGPJ^       ${col_reset}',
+			'${col_pri} ~P@@@@@@@@@@@@@@BGGP555BBBGGGGGG57.    ${col_reset}',
+			'${col_sec}.YG@@@@@@@@@@@&BGYJJY5J~JBBGGGGPPGBG?.  ${col_reset}',
+			'${col_sec}.JPGB&@@@@@@@@@&B57~~?JYGBBGGGPPP5G&B! ${col_reset}',
+			'${col_sec} .7Y5PGB#&@@@@@@@@&######BBGGGGPPPP55@@?${col_reset}',
+			'${col_sec}   .~?Y5PGB#&@@@@@@&&###BBGGGGPPPP55G@&P${col_reset}',
+			'${col_pri}       .~5B&@@@@@@&&###BBBGGGGPPPPB&@#P?${col_reset}',
+			'${col_pri}      .7G@@@@@@@@&&&##BBBGGGGPPGB@@#PY! ${col_reset}',
+			'${col_pri}    ^Y&@@@@@@@@&&&###BBBGGGPGB&@&B5J!.  ${col_reset}',
+			'${col_pri}  ^P@@@@@@@@@&&&&###BBBGGGB#@@#PY?~.    ${col_reset}',
+			'${col_sec} J@@@@@@@@@&&&&####BBGBB&@@#PY?!:       ${col_reset}',
+			'${col_sec}J@@@@@@&&&&&&###BBB##&@&BPY?!^.         ${col_reset}',
+			'${col_sec}5&@&&&&&&#######&&&&BPY?7!^.            ${col_reset}',
+			'${col_sec}!5&@@&&&&&&&&&&BG5Y?7!~:.               ${col_reset}',
+			'${col_sec} ^?YPGGGGPP5YJ?7!~^:.                   ${col_reset}',
+			'${col_sec}  .:~!!77!!!~^:..                        ${col_reset}',
 		]
 	},
 	Art{

@@ -118,6 +118,57 @@ const arts = [
 			'${col_blue}       .hddddddddddddddddddddddh.${col_reset}',
 		]
 	},
+	Art{
+		name: 'Fedora'
+		art:  [
+			'${col_blue}                       ((((                       ${col_reset}',
+			'${col_blue}              (((((((((((((((((((((((             ${col_reset}',
+			'${col_blue}          (((((((((((((((((((((((((((((((         ${col_reset}',
+			'${col_blue}       (((((((((((((((((((((((((((((((((((((      ${col_reset}',
+			'${col_blue}     ((((((((((((((((((((((((${col_reset}#&#${col_blue}((((((((((((((    ${col_reset}',
+			'${col_blue}    (((((((((((((((((((((${col_reset}@@@@@@@@@@@@${col_blue}((((((((((   ${col_reset}',
+			'${col_blue}  (((((((((((((((((((((${col_reset}@@@@@${col_blue}(((((%${col_reset}@@@@${col_blue}((((((((((( ${col_reset}',
+			'${col_blue} ((((((((((((((((((((((${col_reset}@@@@${col_blue}((((((((${col_reset}@@@@${col_blue}((((((((((( ${col_reset}',
+			'${col_blue} ((((((((((((((((((((((${col_reset}@@@@${col_blue}((((((((${col_reset}@@@${col_blue}(((((((((((( ${col_reset}',
+			'${col_blue}(((((((((((((((((((((((${col_reset}@@@@${col_blue}((((((((((((((((((((((( ${col_reset}',
+			'${col_blue}(((((((((((((${col_reset}@@@@@@@@${col_blue}((${col_reset}@@@@@@@@@${col_blue}#((((((((((((((((( ${col_reset}',
+			'${col_blue}((((((((((${col_reset}@@@@@@@@@@@${col_blue}((${col_reset}@@@@@@@@${col_blue}#(((((((((((((((((( ${col_reset}',
+			'${col_blue}(((((((((${col_reset}@@@@${col_blue}((((((((((${col_reset}@@@@${col_blue}((((((((((((((((((((((( ${col_reset}',
+			'${col_blue}((((((((${col_reset}@@@@${col_blue}%((((((((((${col_reset}@@@@${col_blue}((((((((((((((((((((((  ${col_reset}',
+			'${col_blue}(((((((((${col_reset}@@@@${col_blue}(((((((((${col_reset}@@@@@${col_blue}(((((((((((((((((((((   ${col_reset}',
+			'${col_blue}((((((((((${col_reset}@@@@@@${col_blue}#((${col_reset}@@@@@@${col_blue}((((((((((((((((((((((    ${col_reset}',
+			'${col_blue}((((((((((((${col_reset}@@@@@@@@@@@${col_blue}((((((((((((((((((((((      ${col_reset}',
+			'${col_blue}((((((((((((((((((((((((((((((((((((((((((         ${col_reset}',
+			'${col_blue} ((((((((((((((((((((((((((((((((((((((            ${col_reset}',
+			'${col_blue}  (((((((((((((((((((((((((((((((                 ${col_reset}',
+		]
+	},
+	Art{
+		name: 'Artix'
+		art:  [
+			'${col_cyan}                         ,                        ${col_reset}',
+			'${col_cyan}                        ///                       ${col_reset}',
+			'${col_cyan}                       //(//                      ${col_reset}',
+			'${col_cyan}                      //((((/                     ${col_reset}',
+			'${col_cyan}                     ///(((((/                    ${col_reset}',
+			'${col_cyan}                   ////##(((((//                  ${col_reset}',
+			'${col_cyan}                  /////###(((((//                 ${col_reset}',
+			'${col_cyan}                 ////////##((((((/                ${col_reset}',
+			'${col_cyan}                    /////*/*#(((((/               ${col_reset}',
+			'${col_cyan}                         ******((((/              ${col_reset}',
+			'${col_cyan}             /////           ****(((//            ${col_reset}',
+			'${col_cyan}            ///((((/////          **(//           ${col_reset}',
+			'${col_cyan}           ///(((((((((///////        */          ${col_reset}',
+			'${col_cyan}          ///((((((((((###/////////,              ${col_reset}',
+			'${col_cyan}        ////((((((((((######////////////          ${col_reset}',
+			'${col_cyan}       ////((((((((((###//////////         /      ${col_reset}',
+			'${col_cyan}      ///((((((((((***//////          ////((/     ${col_reset}',
+			'${col_cyan}     ////((((((*******            //////#((((/    ${col_reset}',
+			'${col_cyan}    ////(((*****                 ////////#((((/   ${col_reset}',
+			'${col_cyan}  ////(***                              *****((// ${col_reset}',
+			'${col_cyan} //                                            **/ ${col_reset}',
+		]
+	},
 ]
 
 fn human_bytes(b u64) string {
@@ -237,9 +288,36 @@ fn get_local_ip() string {
 
 fn package_counts() map[string]int {
 	mut m := map[string]int{}
+
+	// Nix (NixOS or nix-enabled systems idk)
 	if os.exists('/run/current-system/sw/bin') {
 		m['nix'] = (os.ls('/run/current-system/sw/bin') or { [] }).len
 	}
+
+	// debian, ubuntu
+	if os.exists('/usr/bin/dpkg-query') {
+		output := os.execute('dpkg-query -f \'.\' -W')
+		m['dpkg'] = output.output.len
+	}
+
+	// cucked distros
+	if os.exists('/usr/bin/rpm') {
+		output := os.execute('rpm -qa')
+		m['rpm'] = output.output.split_into_lines().len
+	}
+
+	// pacman
+	if os.exists('/usr/bin/pacman') {
+		output := os.execute('pacman -Q')
+		m['pacman'] = output.output.split_into_lines().len
+	}
+
+	// flatpak (ew)
+	if os.exists('/usr/bin/flatpak') {
+		output := os.execute('flatpak list')
+		m['flatpak'] = output.output.split_into_lines().len
+	}
+
 	return m
 }
 
@@ -330,13 +408,30 @@ fn get_art(fake string) string {
 			}
 		}
 	}
-	os_name := os.uname().sysname.to_lower()
+	os_name := get_distro()
 	host := (os.hostname() or { '' }).to_lower()
 	for a in arts {
 		if os_name.contains(a.name.to_lower()) || host.contains(a.name.to_lower()) {
 			return a.art.join('\n')
 		}
 	}
+
+	return ''
+}
+
+fn get_distro() string {
+	path := '/etc/os-release'
+
+	if !os.exists(path) {
+		return ''
+	}
+
+	for line in os.read_lines(path) or { return '' } {
+		if line.starts_with('PRETTY_NAME=') {
+			return line.all_after('=').trim('"\'')
+		}
+	}
+
 	return ''
 }
 
@@ -370,9 +465,9 @@ fn main() {
 
 	mut info_lines := [
 		'${col_yellow} ${os.getenv('USER')}${col_red}@${col_green}${host} ${col_red}~${col_reset}',
-		'${col_yellow}OS${col_white}: ${uname.sysname} ${uname.release}${col_reset}',
+		'${col_yellow}OS${col_white}: ${get_distro()}${col_reset}',
 		'${col_yellow}Model${col_white}: ${get_model()}${col_reset}',
-		'${col_yellow}Kernel${col_white}: ${uname.version}${col_reset}',
+		'${col_yellow}Kernel${col_white}: ${uname.sysname} ${uname.release}${col_reset}',
 		'${col_yellow}Shell${col_white}: ${get_shell()}${col_reset}',
 		'${col_yellow}Uptime${col_white}: ${fmt_duration(read_uptime())}${col_reset}',
 		'${col_yellow}Packages${col_white}: ${pkgs_str.join(', ')}${col_reset}',

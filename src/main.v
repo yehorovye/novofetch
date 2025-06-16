@@ -76,20 +76,20 @@ const arts = [
 			'${col_green}                  __.;=====;.__',
 			'${col_green}              _.=+==++=++=+=+===;.',
 			'${col_green}               -=+++=+===+=+=+++++=_',
-			'${col_green}          .     -=:`     `--==+=++==.',
+			'${col_green}          .     -=:     --==+=++==.',
 			'${col_green}         _vi,                --+=++++:',
 			'${col_green}        .uvnvi.       _._       -==+==+.',
-			'${col_green}       .vvnvnI`    .;==|==;.     :|=||=|.',
+			'${col_green}       .vvnvnI    .;==|==;.     :|=||=|.',
 			'${col_white}  +QmQQmpvvnv; _yYsyQQWUUQQQm #QmQ#:QQQWUV\$QQm.',
 			'${col_white}   -QQWQWpvvowZ?.wQQQE==<QWWQ/QWQW.QQWW(: jQWQE',
 			'${col_white}    -\$QQQQmmU\\\'  jQQQ\\@+=<QWQQ)mQQQ.mQQQC+;jWQQ\\@\'',
-			'${col_white}     -\$WQ8YnI:   QWQQwgQQWV`mWQQ.jQWQQgyyWW\\@!',
-			'${col_green}       -1vvnvv.     `~+++`        ++|+++.',
-			'${col_green}        +vnvnnv,                 `-|===',
+			'${col_white}     -\$WQ8YnI:   QWQQwgQQWVmWQQ.jQWQQgyyWW\\@!',
+			'${col_green}       -1vvnvv.     ~+++        ++|+++.',
+			'${col_green}        +vnvnnv,                 -|===',
 			'${col_green}         +vnvnvns.           .      :=-',
-			'${col_green}          -Invnvvnsi..___..=sv=.     `${col_reset}',
+			'${col_green}          -Invnvvnsi..___..=sv=.     ${col_reset}',
 			'${col_green}            +Invnvnvnnnnnnnnvvnn;.',
-			'${col_green}              ~|Invnvnvvnvvvnnv}+`',
+			'${col_green}              ~|Invnvnvvnvvvnnv}+',
 			'${col_green}                  -~|{*l}*|~${col_reset}',
 		]
 	},
@@ -100,18 +100,18 @@ const arts = [
 			'${col_blue}      :dddddddddddddddddddddddddd:',
 			'${col_blue}     /dddddddddddddddddddddddddddd/',
 			'${col_blue}    +dddddddddddddddddddddddddddddd+',
-			'${col_blue}  `sdddddddddddddddddddddddddddddddds`',
-			'${col_blue} `ydddddddddddd++hdddddddddddddddddddy`',
-			'${col_blue}.hddddddddddd+`  `+ddddh:-sdddddddddddh.',
-			'${col_blue}hdddddddddd+`      `+y:    .sddddddddddh',
-			'${col_blue}ddddddddh+`   `//`   `.`     -sddddddddd',
-			'${col_blue}ddddddh+`   `/hddh/`   `:s-    -sddddddd',
-			'${col_blue}ddddh+`   `/+/dddddh/`   `+s-    -sddddd',
-			'${col_blue}ddd+`   `/o` :dddddddh/`   `oy-    .yddd',
+			'${col_blue}  sdddddddddddddddddddddddddddddddds',
+			'${col_blue} ydddddddddddd++hdddddddddddddddddddy',
+			'${col_blue}.hddddddddddd+  +ddddh:-sdddddddddddh.',
+			'${col_blue}hdddddddddd+      +y:    .sddddddddddh',
+			'${col_blue}ddddddddh+   //   .     -sddddddddd',
+			'${col_blue}ddddddh+   /hddh/   :s-    -sddddddd',
+			'${col_blue}ddddh+   /+/dddddh/   +s-    -sddddd',
+			'${col_blue}ddd+   /o :dddddddh/   oy-    .yddd',
 			'${col_blue}hdddyo+ohddyosdddddddddho+oydddy++ohdddh',
 			'${col_blue}.hddddddddddddddddddddddddddddddddddddh.',
-			'${col_blue} `yddddddddddddddddddddddddddddddddddy`',
-			'${col_blue}  `sdddddddddddddddddddddddddddddddds`',
+			'${col_blue} yddddddddddddddddddddddddddddddddddy',
+			'${col_blue}  sdddddddddddddddddddddddddddddddds',
 			'${col_blue}    +dddddddddddddddddddddddddddddd+',
 			'${col_blue}     /dddddddddddddddddddddddddddd/',
 			'${col_blue}      :dddddddddddddddddddddddddd:',
@@ -255,11 +255,6 @@ fn read_uptime() int {
 		}
 		boot := parts[1].split(',')[0].int()
 		return time.now().unix_time() - boot
-	} $else $if windows {
-		// TODO: Test this code
-		res := os.execute('Uptime')
-
-		return res
 	} $else {
 		return -1
 	}
@@ -267,21 +262,28 @@ fn read_uptime() int {
 
 fn get_model() string {
 	$if linux {
+		// TODO: Idk man fix this
 		return os.read_file('/sys/class/dmi/id/product_name') or { '' }.trim_space()
 	} $else $if macos {
 		res := os.execute('sysctl -n hw.model')
 		return if res.exit_code == 0 { res.output.trim_space() } else { '' }
-	} $else $if windows {
-		// TODO: Windows support
-		return ''
 	} $else {
 		return ''
 	}
 }
 
 fn get_shell() string {
-	sh := os.getenv_opt('SHELL') or { '' }
-	return if sh == '' { 'unknown' } else { sh.all_after_last('/') }
+	$if macos {
+		res := os.execute("dscl . -read ~/ UserShell")
+		if res.exit_code == 0 {
+			return res.output.trim_space().all_after_last("/")
+		}
+	} $else $if linux {
+		sh := os.getenv_opt('SHELL') or { '' }
+		return if sh == '' { 'unknown' } else { sh.all_after_last('/') }
+	}
+
+	return 'unknown'
 }
 
 struct Route {
@@ -420,7 +422,7 @@ fn root_disk_usage() (u64, u64) {
 	return 0, 0
 }
 
-fn get_art(fake string) string {
+fn get_art(current string, fake string) string {
 	if fake.len > 0 {
 		for a in arts {
 			if a.name.to_lower() == fake.to_lower() {
@@ -428,10 +430,10 @@ fn get_art(fake string) string {
 			}
 		}
 	}
-	os_name := get_distro()
+
 	host := (os.hostname() or { '' }).to_lower()
 	for a in arts {
-		if os_name.contains(a.name.to_lower()) || host.contains(a.name.to_lower()) {
+		if current.contains(a.name.to_lower()) || host.contains(a.name.to_lower()) {
 			return a.art.join('\n')
 		}
 	}
@@ -460,9 +462,10 @@ fn main() {
 		panic('windows is not yet supported')
 	}
 
+	distro := get_distro()
 	fake := if os.args.len > 1 { os.args[1] } else { '' }
 
-	art := get_art(fake)
+	art := get_art(distro, fake)
 
 	host := os.hostname() or { 'unknown' }
 	uname := os.uname()
@@ -485,7 +488,7 @@ fn main() {
 
 	mut info_lines := [
 		'${col_yellow} ${os.getenv('USER')}${col_red}@${col_green}${host} ${col_red}~${col_reset}',
-		'${col_yellow}OS${col_white}: ${get_distro()}${col_reset}',
+		'${col_yellow}OS${col_white}: ${distro}${col_reset}',
 		'${col_yellow}Model${col_white}: ${get_model()}${col_reset}',
 		'${col_yellow}Kernel${col_white}: ${uname.sysname} ${uname.release}${col_reset}',
 		'${col_yellow}Shell${col_white}: ${get_shell()}${col_reset}',

@@ -12,8 +12,6 @@ tmp=$(mktemp)
 echo "# Fetch Benchmarks – ${date_tag}" >"$outfile"
 echo >>"$outfile"
 
-v -prod .
-
 hyperfine \
   "./novofetch" \
   "fastfetch" \
@@ -35,5 +33,4 @@ hyperfine \
 cat "$tmp" >>"$outfile"
 rm "$tmp"
 
-echo "Results written to $outfile"
-
+echo "✅ Results written to $outfile"

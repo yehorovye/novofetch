@@ -169,6 +169,31 @@ const arts = [
 			'${col_cyan} //                                            **/ ${col_reset}',
 		]
 	},
+    Art{
+        name: 'Manjaro'
+        art:  [
+            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((                     ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((                     ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+        ]
+    },
 ]
 
 fn human_bytes(b u64) string {
@@ -296,7 +321,7 @@ fn package_counts() map[string]int {
 
 	// debian, ubuntu
 	if os.exists('/usr/bin/dpkg-query') {
-		output := os.execute('dpkg-query -f \'.\' -W')
+		output := os.execute("dpkg-query -f '.' -W")
 		m['dpkg'] = output.output.len
 	}
 
@@ -353,30 +378,25 @@ fn gpu_list() []string {
 	return []
 }
 
-struct MemInfo {
-mut:
-	total u64
-	free  u64
-	avail u64
-}
+fn read_meminfo() string {
+	mut total := u64(0)
+	mut avail := u64(0)
 
-fn read_meminfo() MemInfo {
-	mut mi := MemInfo{}
 	$if linux {
-		for line in os.read_lines('/proc/meminfo') or { []string{} } {
+		for line in os.read_lines('/proc/meminfo') or { return '' } {
 			if line.starts_with('MemTotal:') {
-				raw := line.all_after(':').trim_space().all_before(' ')
-				mi.total = raw.u64() * 1024
+				total = line.all_after(':').trim_space().all_before(' ').u64() * 1024
 			} else if line.starts_with('MemAvailable:') {
-				raw := line.all_after(':').trim_space().all_before(' ')
-				mi.avail = raw.u64() * 1024
-			} else if line.starts_with('MemFree:') {
-				raw := line.all_after(':').trim_space().all_before(' ')
-				mi.free = raw.u64() * 1024
+				avail = line.all_after(':').trim_space().all_before(' ').u64() * 1024
 			}
 		}
 	}
-	return mi
+
+	used_pct := if total > 0 { f64(total - avail) / f64(total) * 100 } else { 0.0 }
+	unit := if total >= 1024 * 1024 * 1024 { 'GB' } else { 'MB' }
+	div := if unit == 'GB' { 1024.0 * 1024.0 * 1024.0 } else { 1024.0 * 1024.0 }
+
+	return '${f64(avail) / div:.2f}${unit} / ${f64(total) / div:.2f}${unit} (${used_pct:.1f}%)'
 }
 
 fn root_disk_usage() (u64, u64) {
@@ -472,7 +492,7 @@ fn main() {
 		'${col_yellow}Uptime${col_white}: ${fmt_duration(read_uptime())}${col_reset}',
 		'${col_yellow}Packages${col_white}: ${pkgs_str.join(', ')}${col_reset}',
 		'${col_yellow}CPU${col_white}: ${cpu_brand}${col_reset}',
-		'${col_yellow}Memory${col_white}: ${human_bytes(mi.avail)} / ${human_bytes(mi.total)}${col_reset}',
+		'${col_yellow}Memory${col_white}: ${mi}${col_reset}',
 		'${col_yellow}Disk${col_white}: ${human_bytes(free)} free / ${human_bytes(total)} total${col_reset}',
 		'${col_yellow}GPU${col_white}: ${gpu_list().join(', ')}${col_reset}',
 		'${col_yellow}IP${col_white}: ${get_local_ip()}${col_reset}',

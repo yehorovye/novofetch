@@ -1,4 +1,10 @@
-# novofetch
+```
+              _    __      ____     __       __  
+   ____  ____| |  / /___  / __/__  / /______/ /_ 
+  / __ \/ __ \ | / / __ \/ /_/ _ \/ __/ ___/ __ \
+ / / / / /_/ / |/ / /_/ / __/  __/ /_/ /__/ / / /
+/_/ /_/\____/|___/\____/_/  \___/\__/\___/_/ /_/ 
+```
 
 A minimalist system fetch tool written in [V](https://vlang.io).
 `novofetch` displays essential system information.
@@ -35,11 +41,7 @@ This will produce a binary called novofetch in the current directory.
 ```
 
 ### Showcase
-![](https://furry.is-from.space/r/ss_20250615_154405.png)
+![](https://furry.is-from.space/r/ss_20250616_215551.png)
 
 ### Is it fast?
-It is pretty fast.
-
-![](https://furry.is-from.space/r/ss_20250615_165143.png)
-
-> So yes, it is fast but I personally recommend using `microfetch` as it is way faster than any other fetch.
+It is pretty fast, but it's not the fastest. In the [benchmarks dir](https://github.com/yehorovye/novofetch/tree/main/benchmarks) you can check what fetch is the fastest :)

@@ -12,6 +12,9 @@ tmp=$(mktemp)
 echo "# Fetch Benchmarks – ${date_tag}" >"$outfile"
 echo >>"$outfile"
 
+# build the fetch :))))
+v -prod -cc tcc -cflags "-march=native -mtune=native -O3" .
+
 hyperfine \
   "./novofetch" \
   "fastfetch" \

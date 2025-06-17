@@ -60,10 +60,13 @@ jobs:
           EOF
 
       - name: Commit and push plot
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "yehorovye"
+          git config user.email "you@example.com"
           git add benchmarks/*/benchmark-plot.png
           git commit -m "feat(benchmarks): latest plot" || echo "No changes to commit"
-          git push
 
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
+          git push

@@ -1,0 +1,69 @@
+name: Generate Benchmark Plot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  plot-benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install matplotlib pandas
+
+      - name: Find latest benchmark JSON
+        id: latest
+        run: |
+          latest_dir=$(ls -d benchmarks/*/ | sort -r | head -n1)
+          echo "latest_dir=${latest_dir%/}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate plot
+        run: |
+          python <<EOF
+          import json
+          import pandas as pd
+          import matplotlib.pyplot as plt
+          from pathlib import Path
+
+          latest_dir = "${{ steps.latest.outputs.latest_dir }}"
+          json_file = Path(latest_dir) / "fetch-benchmarks.json"
+
+          with open(json_file) as f:
+              data = json.load(f)
+
+          results = data["results"]
+          names = [r["command"] for r in results]
+          times = [r["mean"] for r in results]
+
+          df = pd.DataFrame({"Fetch Utility": names, "Mean Time (s)": times})
+          df.sort_values("Mean Time (s)", inplace=True)
+
+          plt.figure(figsize=(10, 6))
+          plt.barh(df["Fetch Utility"], df["Mean Time (s)"], color="skyblue")
+          plt.xlabel("Mean Time (seconds)")
+          plt.title("Fetch Benchmark – " + latest_dir.split("/")[-1])
+          plt.tight_layout()
+
+          output_path = Path(latest_dir) / "benchmark-plot.png"
+          plt.savefig(output_path)
+          print(f"✅ Plot saved to {output_path}")
+          EOF
+
+      - name: Commit and push plot
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add benchmarks/*/benchmark-plot.png
+          git commit -m "feat(benchmarks): latest plot" || echo "No changes to commit"
+          git push
+

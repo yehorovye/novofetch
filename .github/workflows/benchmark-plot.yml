@@ -29,7 +29,7 @@ jobs:
 
       - name: Generate plot
         run: |
-          python <<EOF
+          python <<'EOF'
           import json
           import pandas as pd
           import matplotlib.pyplot as plt
@@ -42,20 +42,20 @@ jobs:
               data = json.load(f)
 
           results = data["results"]
-          names = [r["command"] for r in results]
-          times = [r["mean"] for r in results]
+          names  = [r["command"] for r in results]
+          times_ms = [r["mean"] * 1000 for r in results]   # ← seconds → milliseconds
 
-          df = pd.DataFrame({"Fetch Utility": names, "Mean Time (s)": times})
-          df.sort_values("Mean Time (s)", inplace=True)
+          df = pd.DataFrame({"Fetch Utility": names, "Mean Time (ms)": times_ms})
+          df.sort_values("Mean Time (ms)", inplace=True)
 
           plt.figure(figsize=(10, 6))
-          plt.barh(df["Fetch Utility"], df["Mean Time (s)"], color="skyblue")
-          plt.xlabel("Mean Time (seconds)")
+          plt.barh(df["Fetch Utility"], df["Mean Time (ms)"])
+          plt.xlabel("Mean Time (milliseconds)")
           plt.title("Fetch Benchmark – " + latest_dir.split("/")[-1])
           plt.tight_layout()
 
           output_path = Path(latest_dir) / "benchmark-plot.png"
-          plt.savefig(output_path)
+          plt.savefig(output_path, dpi=150)
           print(f"✅ Plot saved to {output_path}")
           EOF
 
@@ -63,9 +63,8 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.name  "github-actions[bot]"
 
           git add benchmarks/*/benchmark-plot.png
           git commit -m "feat(benchmarks): latest plot" || echo "No changes to commit"
           git push origin main
-

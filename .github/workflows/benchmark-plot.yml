@@ -59,16 +59,18 @@ jobs:
           print(f"✅ Plot saved to {output_path}")
           EOF
 
-      - name: Commit and push plot
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          git config --global user.name "yehorovye"
-          git config --global user.email "yehorovye@envs.net"
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        - name: Commit and push plot
+          env:
+            GH_TOKEN: ${{ secrets.GH_PAT }}
+          run: |
+            git config --global user.name "yehorovye"
+            git config --global user.email "yehorovye@envs.net"
+            git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
+            git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
 
-          git add benchmarks/*/benchmark-plot.png
-          git commit -m "feat(benchmarks): latest plot" || echo "No changes to commit"
-          git push origin HEAD:main
+            git add benchmarks/*/benchmark-plot.png
+            git commit -m "feat(benchmarks): latest plot" || echo "No changes to commit"
+
+            git push origin HEAD:main
+

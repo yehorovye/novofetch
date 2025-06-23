@@ -194,6 +194,30 @@ const arts = [
             '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
         ]
     },
+    Art{
+        name: 'Arch'
+        art:  [
+            '${col_pri}                   A${col_reset}',
+            '${col_pri}                  /#\\${col_reset}',
+            '${col_pri}                 /###\\${col_reset}',
+            '${col_pri}                /#####\\${col_reset}',
+            '${col_pri}               /#######\\${col_reset}',
+            '${col_pri}              _ "=######\\${col_reset}',
+            '${col_pri}             /##=,_\\#####\\${col_reset}',
+            '${col_pri}            /#############\\${col_reset}',
+            '${col_pri}           /###############\\${col_reset}',
+            '${col_pri}          /#################\\${col_reset}',
+            '${col_pri}         /###################\\${col_reset}',
+            '${col_pri}        /########*"""*########\\${col_reset}',
+            '${col_pri}       /#######/       \\#######\\${col_reset}',
+            '${col_pri}      /########         ########\\${col_reset}',
+            '${col_pri}     /#########         ######m=,_${col_reset}',
+            '${col_pri}    /##########         ##########\\${col_reset}',
+            '${col_pri}   /######***             ***######\\${col_reset}',
+            '${col_pri}  /###**                       **###\\${col_reset}',
+            '${col_pri} /**                               **\\\\${col_reset}',
+        ]
+    },
 ]
 
 fn human_bytes(b u64) string {

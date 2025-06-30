@@ -53,5 +53,10 @@ This will produce a binary called novofetch in the current directory.
 ![](https://bussin.with-your.mom/r/hs315mGpb4.png)
 ![](https://bussin.with-your.mom/r/z6V9fKCx9S.png)
 
+
 <!-- BENCHMARK:START -->
+## Latest benchmark plot
+
+![Benchmark Plot](benchmarks/2025-07-01/benchmark-plot.png)
+
 <!-- BENCHMARK:END -->

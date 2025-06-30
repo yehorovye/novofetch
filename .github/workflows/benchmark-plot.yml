@@ -43,7 +43,7 @@ jobs:
 
           results = data["results"]
           names  = [r["command"] for r in results]
-          times_ms = [r["mean"] * 1000 for r in results]   # ← seconds → milliseconds
+          times_ms = [r["mean"] * 1000 for r in results]
 
           df = pd.DataFrame({"Fetch Utility": names, "Mean Time (ms)": times_ms})
           df.sort_values("Mean Time (ms)", inplace=True)
@@ -59,12 +59,31 @@ jobs:
           print(f"✅ Plot saved to {output_path}")
           EOF
 
-      - name: Commit and push plot
+      - name: Update README with latest benchmark image
+        run: |
+          latest_dir="${{ steps.latest.outputs.latest_dir }}"
+          image_path="${latest_dir}/benchmark-plot.png"
+          image_md="![Benchmark Plot](${image_path})"
+
+          sed -i '/<!-- BENCHMARK:START -->/,/<!-- BENCHMARK:END -->/d' README.md
+
+          {
+            echo ""
+            echo "<!-- BENCHMARK:START -->"
+            echo "## Latest benchmark plot"
+            echo ""
+            echo "${image_md}"
+            echo ""
+            echo "<!-- BENCHMARK:END -->"
+          } >> README.md
+
+      - name: Commit and push plot and README
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name  "github-actions[bot]"
 
-          git add benchmarks/*/benchmark-plot.png
-          git commit -m "feat(benchmarks): latest plot" || echo "No changes to commit"
+          git add benchmarks/*/benchmark-plot.png README.md
+          git commit -m "chore(readme): update benchmark plot" || echo "No changes to commit"
           git push origin main
+

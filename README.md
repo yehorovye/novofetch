@@ -53,5 +53,5 @@ This will produce a binary called novofetch in the current directory.
 ![](https://bussin.with-your.mom/r/hs315mGpb4.png)
 ![](https://bussin.with-your.mom/r/z6V9fKCx9S.png)
 
-### Is it fast?
-It is pretty fast, but it's not the fastest. In the [benchmarks dir](https://github.com/yehorovye/novofetch/tree/main/benchmarks) you can check what fetch is the fastest :)
+<!-- BENCHMARK:START -->
+<!-- BENCHMARK:END -->

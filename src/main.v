@@ -9,16 +9,16 @@ fn colorize(code string) string {
 	return if use_color { code } else { '' }
 }
 
-const col_pri     = colorize('\x1b[38;2;82;119;195m')
-const col_sec     = colorize('\x1b[38;2;127;183;255m')
-const col_blue    = colorize('\x1b[34m')
-const col_cyan    = colorize('\x1b[36m')
-const col_green   = colorize('\x1b[32m')
-const col_yellow  = colorize('\x1b[33m')
-const col_red     = colorize('\x1b[31m')
+const col_pri = colorize('\x1b[38;2;82;119;195m')
+const col_sec = colorize('\x1b[38;2;127;183;255m')
+const col_blue = colorize('\x1b[34m')
+const col_cyan = colorize('\x1b[36m')
+const col_green = colorize('\x1b[32m')
+const col_yellow = colorize('\x1b[33m')
+const col_red = colorize('\x1b[31m')
 const col_magenta = colorize('\x1b[35m')
-const col_white   = colorize('\x1b[37m')
-const col_reset   = colorize('\x1b[0m')
+const col_white = colorize('\x1b[37m')
+const col_reset = colorize('\x1b[0m')
 
 struct Art {
 	name string
@@ -198,6 +198,30 @@ const arts = [
 			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
 			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
 			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+		]
+	},
+	Art{
+		name: 'Arch'
+		art:  [
+			'${col_pri}                   A${col_reset}',
+			'${col_pri}                  /#\\${col_reset}',
+			'${col_pri}                 /###\\${col_reset}',
+			'${col_pri}                /#####\\${col_reset}',
+			'${col_pri}               /#######\\${col_reset}',
+			'${col_pri}              _ "=######\\${col_reset}',
+			'${col_pri}             /##=,_\\#####\\${col_reset}',
+			'${col_pri}            /#############\\${col_reset}',
+			'${col_pri}           /###############\\${col_reset}',
+			'${col_pri}          /#################\\${col_reset}',
+			'${col_pri}         /###################\\${col_reset}',
+			'${col_pri}        /########*"""*########\\${col_reset}',
+			'${col_pri}       /#######/       \\#######\\${col_reset}',
+			'${col_pri}      /########         ########\\${col_reset}',
+			'${col_pri}     /#########         ######m=,_${col_reset}',
+			'${col_pri}    /##########         ##########\\${col_reset}',
+			'${col_pri}   /######***             ***######\\${col_reset}',
+			'${col_pri}  /###**                       **###\\${col_reset}',
+			'${col_pri} /**                               **\\\\${col_reset}',
 		]
 	},
 	Art{

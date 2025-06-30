@@ -3,16 +3,22 @@ import os
 import time
 import json
 
-const col_pri = '\x1b[38;2;82;119;195m'
-const col_sec = '\x1b[38;2;127;183;255m'
-const col_blue = '\x1b[34m'
-const col_cyan = '\x1b[36m'
-const col_green = '\x1b[32m'
-const col_yellow = '\x1b[33m'
-const col_red = '\x1b[31m'
-const col_magenta = '\x1b[35m'
-const col_white = '\x1b[37m'
-const col_reset = '\x1b[0m'
+const use_color = os.getenv('NO_COLOR') == ''
+
+fn colorize(code string) string {
+	return if use_color { code } else { '' }
+}
+
+const col_pri     = colorize('\x1b[38;2;82;119;195m')
+const col_sec     = colorize('\x1b[38;2;127;183;255m')
+const col_blue    = colorize('\x1b[34m')
+const col_cyan    = colorize('\x1b[36m')
+const col_green   = colorize('\x1b[32m')
+const col_yellow  = colorize('\x1b[33m')
+const col_red     = colorize('\x1b[31m')
+const col_magenta = colorize('\x1b[35m')
+const col_white   = colorize('\x1b[37m')
+const col_reset   = colorize('\x1b[0m')
 
 struct Art {
 	name string
@@ -146,54 +152,58 @@ const arts = [
 	Art{
 		name: 'Artix'
 		art:  [
-			'${col_cyan}                         ,                        ${col_reset}',
-			'${col_cyan}                        ///                       ${col_reset}',
-			'${col_cyan}                       //(//                      ${col_reset}',
-			'${col_cyan}                      //((((/                     ${col_reset}',
-			'${col_cyan}                     ///(((((/                    ${col_reset}',
-			'${col_cyan}                   ////##(((((//                  ${col_reset}',
-			'${col_cyan}                  /////###(((((//                 ${col_reset}',
-			'${col_cyan}                 ////////##((((((/                ${col_reset}',
-			'${col_cyan}                    /////*/*#(((((/               ${col_reset}',
-			'${col_cyan}                         ******((((/              ${col_reset}',
-			'${col_cyan}             /////           ****(((//            ${col_reset}',
-			'${col_cyan}            ///((((/////          **(//           ${col_reset}',
-			'${col_cyan}           ///(((((((((///////        */          ${col_reset}',
+			'${col_blue}                         ,                        ${col_reset}',
+			'${col_blue}                        ///                       ${col_reset}',
+			'${col_blue}                       //(//                      ${col_reset}',
+			'${col_blue}                      //((((/                     ${col_reset}',
+			'${col_blue}                     ///(((((/                    ${col_reset}',
+			'${col_blue}                   ////##(((((//                  ${col_reset}',
+			'${col_blue}                  /////###(((((//                 ${col_reset}',
+			'${col_blue}                 ////////##((((((/                ${col_reset}',
+			'${col_blue}                    /////*/*#(((((/               ${col_reset}',
+			'${col_blue}                         ******((((/              ${col_reset}',
+			'${col_cyan}             /////           ${col_blue}****(((//            ${col_reset}',
+			'${col_cyan}            ///((((/////          ${col_blue}**(//           ${col_reset}',
+			'${col_cyan}           ///(((((((((///////        ${col_blue}*/          ${col_reset}',
 			'${col_cyan}          ///((((((((((###/////////,              ${col_reset}',
 			'${col_cyan}        ////((((((((((######////////////          ${col_reset}',
-			'${col_cyan}       ////((((((((((###//////////         /      ${col_reset}',
-			'${col_cyan}      ///((((((((((***//////          ////((/     ${col_reset}',
-			'${col_cyan}     ////((((((*******            //////#((((/    ${col_reset}',
-			'${col_cyan}    ////(((*****                 ////////#((((/   ${col_reset}',
-			'${col_cyan}  ////(***                              *****((// ${col_reset}',
-			'${col_cyan} //                                            **/ ${col_reset}',
+			'${col_cyan}       ////((((((((((###//////////         ${col_blue}/      ${col_reset}',
+			'${col_cyan}      ///((((((((((***//////          ${col_blue}////((/     ${col_reset}',
+			'${col_cyan}     ////((((((*******            ${col_blue}//////#((((/    ${col_reset}',
+			'${col_cyan}    ////(((*****                 ${col_blue}////////#((((/   ${col_reset}',
+			'${col_cyan}  ////(***                              ${col_blue}*****((// ${col_reset}',
+			'${col_cyan} //                                            ${col_blue}**/ ${col_reset}',
 		]
 	},
-    Art{
-        name: 'Manjaro'
-        art:  [
-            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((                     ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((                     ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-            '${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
-        ]
-    },
+	Art{
+		name: 'Manjaro'
+		art:  [
+			'${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((((((((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((                     ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((                     ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+			'${col_green}(((((((((((((((   (((((((((((((((   ((((((((((((((${col_reset}',
+		]
+	},
+	Art{
+		name: 'None'
+		art:  []
+	},
 ]
 
 fn human_bytes(b u64) string {
@@ -274,9 +284,9 @@ fn get_model() string {
 
 fn get_shell() string {
 	$if macos {
-		res := os.execute("dscl . -read ~/ UserShell")
+		res := os.execute('dscl . -read ~/ UserShell')
 		if res.exit_code == 0 {
-			return res.output.trim_space().all_after_last("/")
+			return res.output.trim_space().all_after_last('/')
 		}
 	} $else $if linux {
 		sh := os.getenv_opt('SHELL') or { '' }
@@ -349,7 +359,7 @@ fn package_counts() map[string]int {
 }
 
 fn colourful_dots() string {
-	colors := [col_blue, col_cyan, col_green, col_yellow, col_red, col_magenta]
+	colors := [col_blue, col_cyan, col_green, col_cyan, col_red, col_magenta]
 	dot := ''
 	return colors.map(it + dot).join(' ') + col_reset
 }
@@ -487,18 +497,18 @@ fn main() {
 	total, free := root_disk_usage()
 
 	mut info_lines := [
-		'${col_yellow} ${os.getenv('USER')}${col_red}@${col_green}${host} ${col_red}~${col_reset}',
-		'${col_yellow}OS${col_white}: ${distro}${col_reset}',
-		'${col_yellow}Model${col_white}: ${get_model()}${col_reset}',
-		'${col_yellow}Kernel${col_white}: ${uname.sysname} ${uname.release}${col_reset}',
-		'${col_yellow}Shell${col_white}: ${get_shell()}${col_reset}',
-		'${col_yellow}Uptime${col_white}: ${fmt_duration(read_uptime())}${col_reset}',
-		'${col_yellow}Packages${col_white}: ${pkgs_str.join(', ')}${col_reset}',
-		'${col_yellow}CPU${col_white}: ${cpu_brand}${col_reset}',
-		'${col_yellow}Memory${col_white}: ${mi}${col_reset}',
-		'${col_yellow}Disk${col_white}: ${human_bytes(free)} free / ${human_bytes(total)} total${col_reset}',
-		'${col_yellow}GPU${col_white}: ${gpu_list().join(', ')}${col_reset}',
-		'${col_yellow}IP${col_white}: ${get_local_ip()}${col_reset}',
+		'${col_cyan} ${os.getenv('USER')}${col_red}@${col_green}${host} ${col_red}~${col_reset}',
+		'${col_cyan}OS${col_white}: ${distro}${col_reset}',
+		'${col_cyan}Model${col_white}: ${get_model()}${col_reset}',
+		'${col_cyan}Kernel${col_white}: ${uname.sysname} ${uname.release}${col_reset}',
+		'${col_cyan}Shell${col_white}: ${get_shell()}${col_reset}',
+		'${col_cyan}Uptime${col_white}: ${fmt_duration(read_uptime())}${col_reset}',
+		'${col_cyan}Packages${col_white}: ${pkgs_str.join(', ')}${col_reset}',
+		'${col_cyan}CPU${col_white}: ${cpu_brand}${col_reset}',
+		'${col_cyan}Memory${col_white}: ${mi}${col_reset}',
+		'${col_cyan}Disk${col_white}: ${human_bytes(free)} free / ${human_bytes(total)} total${col_reset}',
+		'${col_cyan}GPU${col_white}: ${gpu_list().join(', ')}${col_reset}',
+		'${col_cyan}IP${col_white}: ${get_local_ip()}${col_reset}',
 		'${col_reset}${colourful_dots()}',
 	]
 

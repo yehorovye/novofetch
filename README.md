@@ -1,9 +1,9 @@
 ```
-              _    __      ____     __       __  
-   ____  ____| |  / /___  / __/__  / /______/ /_ 
+              _    __      ____     __       __
+   ____  ____| |  / /___  / __/__  / /______/ /_
   / __ \/ __ \ | / / __ \/ /_/ _ \/ __/ ___/ __ \
  / / / / /_/ / |/ / /_/ / __/  __/ /_/ /__/ / / /
-/_/ /_/\____/|___/\____/_/  \___/\__/\___/_/ /_/ 
+/_/ /_/\____/|___/\____/_/  \___/\__/\___/_/ /_/
 ```
 
 A minimalist system fetch tool written in [V](https://vlang.io).
@@ -25,6 +25,14 @@ A minimalist system fetch tool written in [V](https://vlang.io).
 - [V language](https://vlang.io) installed and available in your `$PATH` (for nix users, there is a flake for easy development)
 - Unix-like OS (Linux, macOS) (i was too lazy to make windows support)
 
+### Features
+
+- `NO_COLOR` spec compliant
+- Pretty fast
+- Colorful
+- Did I say it's fast?
+- Looks good imo
+
 ### Clone and Build (or contribute)
 
 ```sh
@@ -37,11 +45,13 @@ This will produce a binary called novofetch in the current directory.
 
 ### Usage
 ```
-./novofetch
+./novofetch [distro]
 ```
 
 ### Showcase
-![](https://furry.is-from.space/r/ss_20250616_215551.png)
+![](https://furry.is-from.space/r/3cGVlWmto0.png)
+![](https://bussin.with-your.mom/r/hs315mGpb4.png)
+![](https://bussin.with-your.mom/r/z6V9fKCx9S.png)
 
 ### Is it fast?
 It is pretty fast, but it's not the fastest. In the [benchmarks dir](https://github.com/yehorovye/novofetch/tree/main/benchmarks) you can check what fetch is the fastest :)

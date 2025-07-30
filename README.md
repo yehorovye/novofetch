@@ -60,6 +60,7 @@ This will produce a binary called novofetch in the current directory.
 
 
 
+
 <!-- BENCHMARK:START -->
 ## Latest benchmark plot
 

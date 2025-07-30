@@ -1,3 +1,7 @@
+> deprecation notice: i am not interested in maintaining this project any
+further, as of [462f511](https://github.com/yehorovye/novofetch/commit/462f51143421e587aa4e29002d16f62b28f78ad2),
+this project is dedicated to public domain.
+
 ```
               _    __      ____     __       __
    ____  ____| |  / /___  / __/__  / /______/ /_

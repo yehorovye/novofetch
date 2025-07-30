@@ -1,6 +1,4 @@
-// tested on nixos
 import os
-import time
 import json
 
 const use_color = os.getenv('NO_COLOR') == ''
@@ -25,9 +23,6 @@ struct Art {
 	art  []string
 }
 
-// thanks to chatgpt for the ascii arts.
-// anyways, nix logo seems a bit off idk why
-// if want more logos please submit a pr
 const arts = [
 	Art{
 		name: 'Nix'
@@ -275,49 +270,17 @@ fn visible_len(s string) int {
 }
 
 fn read_uptime() int {
-	$if linux {
-		content := os.read_file('/proc/uptime') or { return -1 }
-		return content.split(' ')[0].int()
-	} $else $if macos {
-		res := os.execute('sysctl -n kern.boottime')
-		if res.exit_code != 0 {
-			return -1
-		}
-		parts := res.output.split('sec = ')
-		if parts.len < 2 {
-			return -1
-		}
-		boot := parts[1].split(',')[0].int()
-		return time.now().unix_time() - boot
-	} $else {
-		return -1
-	}
+	content := os.read_file('/proc/uptime') or { return -1 }
+	return content.split(' ')[0].int()
 }
 
 fn get_model() string {
-	$if linux {
-		// TODO: Idk man fix this
-		return os.read_file('/sys/class/dmi/id/product_name') or { '' }.trim_space()
-	} $else $if macos {
-		res := os.execute('sysctl -n hw.model')
-		return if res.exit_code == 0 { res.output.trim_space() } else { '' }
-	} $else {
-		return ''
-	}
+	return os.read_file('/sys/class/dmi/id/product_name') or { '' }.trim_space()
 }
 
 fn get_shell() string {
-	$if macos {
-		res := os.execute('dscl . -read ~/ UserShell')
-		if res.exit_code == 0 {
-			return res.output.trim_space().all_after_last('/')
-		}
-	} $else $if linux {
-		sh := os.getenv_opt('SHELL') or { '' }
-		return if sh == '' { 'unknown' } else { sh.all_after_last('/') }
-	}
-
-	return 'unknown'
+	sh := os.getenv_opt('SHELL') or { '' }
+	return if sh == '' { 'unknown' } else { sh.all_after_last('/') }
 }
 
 struct Route {
@@ -325,55 +288,38 @@ struct Route {
 }
 
 fn get_local_ip() string {
-	$if linux {
-		res := os.execute('ip -j route')
-		if res.exit_code != 0 {
-			return 'idk lol'
-		}
-		data := res.output.trim_space()
-		// Decode into an array of Route structs
-		routes := json.decode([]Route, data) or { return 'idk lol' }
-		for r in routes {
-			if r.prefsrc.len > 0 {
-				return r.prefsrc
-			}
-		}
-		return 'idk lol'
-	} $else $if macos {
-		res := os.execute('ipconfig getifaddr en0')
-		return if res.exit_code == 0 { res.output.trim_space() } else { 'idk lol' }
-	} $else {
+	res := os.execute('ip -j route')
+	if res.exit_code != 0 {
 		return 'idk lol'
 	}
+	data := res.output.trim_space()
+	routes := json.decode([]Route, data) or { return 'idk lol' }
+	for r in routes {
+		if r.prefsrc.len > 0 {
+			return r.prefsrc
+		}
+	}
+	return 'idk lol'
 }
 
 fn package_counts() map[string]int {
 	mut m := map[string]int{}
 
-	// Nix (NixOS or nix-enabled systems idk)
 	if os.exists('/run/current-system/sw/bin') {
 		m['nix'] = (os.ls('/run/current-system/sw/bin') or { [] }).len
 	}
-
-	// debian, ubuntu
 	if os.exists('/usr/bin/dpkg-query') {
 		output := os.execute("dpkg-query -f '.' -W")
 		m['dpkg'] = output.output.len
 	}
-
-	// cucked distros
 	if os.exists('/usr/bin/rpm') {
 		output := os.execute('rpm -qa')
 		m['rpm'] = output.output.split_into_lines().len
 	}
-
-	// pacman
 	if os.exists('/usr/bin/pacman') {
 		output := os.execute('pacman -Q')
 		m['pacman'] = output.output.split_into_lines().len
 	}
-
-	// flatpak (ew)
 	if os.exists('/usr/bin/flatpak') {
 		output := os.execute('flatpak list')
 		m['flatpak'] = output.output.split_into_lines().len
@@ -384,47 +330,39 @@ fn package_counts() map[string]int {
 
 fn colourful_dots() string {
 	colors := [col_blue, col_cyan, col_green, col_cyan, col_red, col_magenta]
-	dot := ''
-	return colors.map(it + dot).join(' ') + col_reset
+	return colors.map(it + '').join(' ') + col_reset
 }
 
 fn gpu_list() []string {
-	$if linux {
-		res := os.execute('lspci')
-		if res.exit_code != 0 {
-			return []
-		}
-		mut gpus := []string{}
-		for line in res.output.split_into_lines() {
-			if line.contains('VGA') || line.contains('3D controller') {
-				desc := line.all_after(': ').trim_space()
-				// Prefer contents inside brackets if present
-				if desc.contains('[') && desc.contains(']') {
-					gpus << desc.all_after('[').all_before(']').trim_space()
-				} else {
-					// fallback: take last 3 words
-					parts := desc.split(' ')
-					short := parts[parts.len - 3..].join(' ')
-					gpus << short
-				}
+	res := os.execute('lspci')
+	if res.exit_code != 0 {
+		return []
+	}
+	mut gpus := []string{}
+	for line in res.output.split_into_lines() {
+		if line.contains('VGA') || line.contains('3D controller') {
+			desc := line.all_after(': ').trim_space()
+			if desc.contains('[') && desc.contains(']') {
+				gpus << desc.all_after('[').all_before(']').trim_space()
+			} else {
+				parts := desc.split(' ')
+				short := parts[parts.len - 3..].join(' ')
+				gpus << short
 			}
 		}
-		return gpus
 	}
-	return []
+	return gpus
 }
 
 fn read_meminfo() string {
 	mut total := u64(0)
 	mut avail := u64(0)
 
-	$if linux {
-		for line in os.read_lines('/proc/meminfo') or { return '' } {
-			if line.starts_with('MemTotal:') {
-				total = line.all_after(':').trim_space().all_before(' ').u64() * 1024
-			} else if line.starts_with('MemAvailable:') {
-				avail = line.all_after(':').trim_space().all_before(' ').u64() * 1024
-			}
+	for line in os.read_lines('/proc/meminfo') or { return '' } {
+		if line.starts_with('MemTotal:') {
+			total = line.all_after(':').trim_space().all_before(' ').u64() * 1024
+		} else if line.starts_with('MemAvailable:') {
+			avail = line.all_after(':').trim_space().all_before(' ').u64() * 1024
 		}
 	}
 
@@ -436,24 +374,21 @@ fn read_meminfo() string {
 }
 
 fn root_disk_usage() (u64, u64) {
-	$if linux {
-		res := os.execute('df -B1 /')
-		if res.exit_code != 0 {
-			return 0, 0
-		}
-		lines := res.output.split_into_lines()
-		if lines.len < 2 {
-			return 0, 0
-		}
-		cols := lines[1].fields()
-		if cols.len < 3 {
-			return 0, 0
-		}
-		total := cols[1].u64()
-		used := cols[2].u64()
-		return total, total - used
+	res := os.execute('df -B1 /')
+	if res.exit_code != 0 {
+		return 0, 0
 	}
-	return 0, 0
+	lines := res.output.split_into_lines()
+	if lines.len < 2 {
+		return 0, 0
+	}
+	cols := lines[1].fields()
+	if cols.len < 3 {
+		return 0, 0
+	}
+	total := cols[1].u64()
+	used := cols[2].u64()
+	return total, total - used
 }
 
 fn get_art(current string, fake string) string {
@@ -477,28 +412,24 @@ fn get_art(current string, fake string) string {
 
 fn get_distro() string {
 	path := '/etc/os-release'
-
 	if !os.exists(path) {
 		return ''
 	}
-
 	for line in os.read_lines(path) or { return '' } {
 		if line.starts_with('PRETTY_NAME=') {
 			return line.all_after('=').trim('"\'')
 		}
 	}
-
 	return ''
 }
 
 fn main() {
 	$if windows {
-		panic('windows is not yet supported')
+		panic('windows LOLLLLLLLLLL xDDDDDDDDDDDDDD')
 	}
 
 	distro := get_distro()
 	fake := if os.args.len > 1 { os.args[1] } else { '' }
-
 	art := get_art(distro, fake)
 
 	host := os.hostname() or { 'unknown' }
@@ -508,12 +439,10 @@ fn main() {
 	mut pkgs_str := pkgs.keys().map('${it} - ${pkgs[it]}')
 
 	mut cpu_brand := ''
-	$if linux {
-		for line in os.read_lines('/proc/cpuinfo') or { []string{} } {
-			if line.starts_with('model name') {
-				cpu_brand = line.all_after(':').trim_space()
-				break
-			}
+	for line in os.read_lines('/proc/cpuinfo') or { []string{} } {
+		if line.starts_with('model name') {
+			cpu_brand = line.all_after(':').trim_space()
+			break
 		}
 	}
 
@@ -536,10 +465,8 @@ fn main() {
 		'${col_reset}${colourful_dots()}',
 	]
 
-	// Display: align info lines with art ‑‑ dynamic width
 	art_lines := if art.len > 0 { art.split_into_lines() } else { []string{} }
 
-	// visible_len() for some reason ignores ANSI codes, so this is the real on‑screen width
 	mut art_width := 0
 	for l in art_lines {
 		w := visible_len(l)
@@ -547,7 +474,7 @@ fn main() {
 			art_width = w
 		}
 	}
-	pad_gap := 2 // gap between art and info
+	pad_gap := 2
 	total_pad := art_width + pad_gap
 
 	max_lines := if art_lines.len > info_lines.len { art_lines.len } else { info_lines.len }
